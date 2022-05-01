@@ -20,8 +20,14 @@ class _SignInPageState extends State<SignInPage> {
     String email = emailController.text;
     String password = passwordController.text;
 
+      if (userPost.currentState!.validate()) {
+        userPost.currentState!.save();
+      }
+
+
     if (email.isNotEmpty && password.isNotEmpty) {
       //Navigator.pushReplacementNamed(context, HomePage.id);
+      print("not empty");
     }
   }
 
@@ -37,7 +43,7 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: IconButton(
@@ -92,6 +98,9 @@ class _SignInPageState extends State<SignInPage> {
                     color: Colors.grey[200],
                   ),
                   child: TextFormField(
+                    validator: (input) =>
+                    input!.contains("@") ? null : "there is not '@' ",
+                    onSaved: (input) => email = input!,
                     controller: emailController,
                     style: TextStyle(fontSize: 16),
                     decoration: InputDecoration(
@@ -113,6 +122,9 @@ class _SignInPageState extends State<SignInPage> {
                     color: Colors.grey[200],
                   ),
                   child: TextFormField(
+                    validator: (input) =>
+                    input!.length < 8 ? "Must be at least 8 character" : null,
+                    onSaved: (input) => password = input!,
                     obscureText: on,
                     controller: passwordController,
                     style: TextStyle(fontSize: 16),
@@ -171,31 +183,41 @@ class _SignInPageState extends State<SignInPage> {
                         // google image
                         GestureDetector(
                           child: Container(
-                            margin: EdgeInsets.only(top: 10,bottom: 20),
+                            margin: EdgeInsets.only(top: 10, bottom: 20),
                             height: 50,
                             width: 50,
-                            child: Image.asset("assets/images/google.jpg",fit: BoxFit.cover,),
+                            child: Image.asset(
+                              "assets/images/google.jpg",
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      // facebook image
-                      GestureDetector(
-                        child:   Container(
-                          margin: EdgeInsets.only(top: 10,right: 70,bottom: 20,left: 60),
-                          height: 35,
-                          width: 40,
-                          child: Image.asset("assets/images/facebook.png",fit: BoxFit.cover,),
+                        // facebook image
+                        GestureDetector(
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                top: 10, right: 70, bottom: 20, left: 60),
+                            height: 35,
+                            width: 40,
+                            child: Image.asset(
+                              "assets/images/facebook.png",
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
-                      ),
                         // twitter image
                         GestureDetector(
                           child: Container(
-                            margin: EdgeInsets.only(top: 10,right:20,bottom: 20),
+                            margin: EdgeInsets.only(
+                                top: 10, right: 20, bottom: 20),
                             height: 30,
                             width: 30,
-                            child: Image.asset("assets/images/twitter.jpg",fit: BoxFit.cover,),
+                            child: Image.asset(
+                              "assets/images/twitter.jpg",
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-
                       ],
                     ),
                   ],
@@ -215,7 +237,8 @@ class _SignInPageState extends State<SignInPage> {
                           style: TextStyle(color: Colors.blue, fontSize: 16),
                         ),
                         onTap: () {
-                          Navigator.pushReplacementNamed(context, SignUpPage.id);
+                          Navigator.pushReplacementNamed(
+                              context, SignUpPage.id);
                         },
                       ),
                     ],

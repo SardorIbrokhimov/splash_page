@@ -13,13 +13,21 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   int count = 0;
   int count2 = 0;
-  late String email1, email2, password1, password2;
+  late String email, password1, password2;
 
   final userPost = GlobalKey<FormState>();
 
-  _doSignUp() {
-    if (userPost.currentState!.validate()) {
-      userPost.currentState!.save();
+  TextEditingController emailController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
+  TextEditingController confirmpasswordController = new TextEditingController();
+
+  _doSignIn() {
+    String email = emailController.text;
+    String password = passwordController.text;
+
+    if (email.isNotEmpty && password.isNotEmpty) {
+      //Navigator.pushReplacementNamed(context, HomePage.id);
+      print("not empty");
     }
   }
 
@@ -31,173 +39,236 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Sign Up",
-          style: TextStyle(fontFamily: "Cyberspace"),
+      body: Padding(
+        padding: const EdgeInsets.only(
+          top: 20,
         ),
-        backgroundColor: Colors.pink,
-      ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: userPost,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
+        child: SingleChildScrollView(
+          child: Form(
+            key: userPost,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "Creat New Account",
-                  style: TextStyle(
-                      fontSize: 30, color: Colors.black, fontFamily: "Hamlet"),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                TextFormField(
-                  validator: (input) => input!.contains("@")
-                      ? "Please enter a valid email"
-                      : null,
-                  onSaved: (input) => email1 = input!,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    hintText: "@Username",
-                  ),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                TextFormField(
-                  onSaved: (input) => email2 = input!,
-                  obscureText: false,
-                  decoration: InputDecoration(
-                    hintText: "Email",
-                  ),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                TextFormField(
-                  validator: (input) =>
-                      input!.length < 8 ? "Must be at least 8 character" : null,
-                  onSaved: (input) => password1 = input!,
-                  obscureText: on,
-                  decoration: InputDecoration(
-                    hintText: "Password",
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        count++;
-                        setState(() {
-                          if (count.isEven) {
-                            on = true;
-                          } else {
-                            on = false;
-                          }
-                        });
-
-                        print(count);
-                      },
-                      icon: count.isOdd ? close : open,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                TextFormField(
-                  validator: (input) =>
-                      int.parse(input!) - int.parse(password1) == 0
-                          ? "Please check password"
-                          : null,
-                  onSaved: (input) => password2 = input!,
-                  obscureText: on2,
-                  decoration: InputDecoration(
-                      hintText: "Confirm Password",
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          count2++;
-                          setState(() {
-                            if (count2.isEven) {
-                              on2 = true;
-                            } else {
-                              on2 = false;
-                            }
-                          });
-
-                          print(count2);
-                        },
-                        icon: count2.isOdd ? close : open,
-                      )),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "By singing up you accept the ",
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Text(
-                        "term of service",
-                        style: TextStyle(fontSize: 15, color: Colors.blue),
+                Center(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 90),
+                    height: 60,
+                    width: 120,
+                    child: Image(
+                      image: AssetImage(
+                        "assets/images/cignifi.jpg",
                       ),
+                      fit: BoxFit.cover,
                     ),
-                  ],
+                  ),
                 ),
-                Row(
-                  children: [
-                    Text(
-                      "and",
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Text(
-                        "Privacy Policy",
-                        style: TextStyle(fontSize: 15, color: Colors.blue),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
+
                 Container(
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                  height: 50,
-                  width: double.infinity,
+                  margin: EdgeInsets.only(right: 20, left: 20, top: 60),
+                  child: Text(
+                    "Creat new account",
+                    style: TextStyle(fontSize: 20, color: Colors.black),
+                  ),
+                ),
+
+                //email container
+                Container(
+                  margin: EdgeInsets.only(left: 20, right: 20, top: 15),
+                  height: 48,
                   decoration: BoxDecoration(
-                    color: Colors.redAccent,
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.grey[200],
+                  ),
+                  child: TextFormField(
+                    validator: (input) =>
+                        input!.contains("@") ? null : "there is not '@' ",
+                    onSaved: (input) => email = input!,
+                    controller: emailController,
+                    style: TextStyle(fontSize: 16),
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(10),
+                      border: new OutlineInputBorder(
+                        borderSide: new BorderSide(color: Colors.teal),
+                      ),
+                      hintText: "Email",
+                      hintStyle: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                ),
+
+                //password container
+                Container(
+                  margin: EdgeInsets.only(left: 20, right: 20, top: 15),
+                  height: 48,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.grey[200],
+                  ),
+                  child: TextFormField(
+                    validator: (input) => input!.length < 8
+                        ? "Must be at least 8 character"
+                        : null,
+                    onSaved: (input) => password1 = input!,
+                    obscureText: on,
+                    controller: passwordController,
+                    style: TextStyle(fontSize: 16),
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(10),
+                      border: new OutlineInputBorder(
+                        borderSide: new BorderSide(color: Colors.teal),
+                      ),
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              on = !on;
+                            });
+                          },
+                          icon: on ? open : close),
+                      hintText: "Password",
+                      hintStyle: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                ),
+
+                //corfirm password container
+                Container(
+                  margin: EdgeInsets.only(left: 20, right: 20, top: 15),
+                  height: 48,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.grey[200],
+                  ),
+                  child: TextFormField(
+                    obscureText: on2,
+                    controller: confirmpasswordController,
+                    style: TextStyle(fontSize: 16),
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(10),
+                      border: new OutlineInputBorder(
+                        borderSide: new BorderSide(color: Colors.teal),
+                      ),
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              on2 = !on2;
+                            });
+                          },
+                          icon: on2 ? open : close),
+                      hintText: "Password",
+                      hintStyle: TextStyle(color: Colors.grey),
+                    ),
+                    validator: (input) {
+                      if (input!.isEmpty) {
+                        return "Please re-enter password";
+                      }
+                      if (passwordController.text !=
+                          confirmpasswordController.text) {
+                        return "Password do not match";
+                      }
+                    },
+                  ),
+                ),
+                //signin container
+                Container(
+                  margin: EdgeInsets.only(left: 20, right: 20, top: 15),
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Color(0xff193889),
+                    borderRadius: BorderRadius.circular(5),
                   ),
                   child: FlatButton(
-                      onPressed: _doSignUp,
-                      child: Text(
-                        "Sign Up",
-                        style: TextStyle(fontSize: 22, color: Colors.white),
-                      )),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Already have an account?"),
-                    GestureDetector(
-                      onTap: () {
+                    onPressed: () {
+                      if (userPost.currentState!.validate()) {
                         Navigator.pushReplacementNamed(context, SignInPage.id);
-                      },
-                      child: Text(
-                        "Sign In",
-                        style: TextStyle(color: Colors.blue),
+                      }
+                      else {
+
+                      }
+                    },
+                    child: Container(
+                      child: Center(
+                        child: Text(
+                          "Sign in",
+                          style: TextStyle(fontSize: 20, color: Colors.white),
+                        ),
                       ),
                     ),
+                  ),
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // google image
+                        GestureDetector(
+                          child: Container(
+                            margin: EdgeInsets.only(top: 10, bottom: 20),
+                            height: 50,
+                            width: 50,
+                            child: Image.asset(
+                              "assets/images/google.jpg",
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        // facebook image
+                        GestureDetector(
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                top: 10, right: 70, bottom: 20, left: 60),
+                            height: 35,
+                            width: 40,
+                            child: Image.asset(
+                              "assets/images/facebook.png",
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        // twitter image
+                        GestureDetector(
+                          child: Container(
+                            margin:
+                                EdgeInsets.only(top: 10, right: 20, bottom: 20),
+                            height: 30,
+                            width: 30,
+                            child: Image.asset(
+                              "assets/images/twitter.jpg",
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
+                ),
+
+                Container(
+                  margin: EdgeInsets.only(top: 60),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Already have you an account? ",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      GestureDetector(
+                        child: Text(
+                          "Sign In",
+                          style: TextStyle(color: Colors.blue, fontSize: 16),
+                        ),
+                        onTap: () {
+                          Navigator.pushReplacementNamed(
+                              context, SignInPage.id);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
